@@ -1,0 +1,41 @@
+# This baseline functionality will be necessary to the final C code no matter 
+# how the finite state machine is configured.
+# 
+struct transition {
+    const enum state from_state;
+    const enum state (*fnc_out)(const enum state, const enum state);
+    const enum state (*fnc_in)(const enum state, const enum state);
+    const enum state to_state;
+};
+
+const enum state transition_check(const enum state from, const enum state to)
+{
+    for (int i = 0; i < NSTATES; i++)
+    {
+        const enum state *transition = transition_table[i];
+        if (transition[0] == transition[1])
+            return to;
+    }
+
+    return from;
+}
+
+const enum state transition(const struct transition *t)
+{
+    const enum state from = t->from_state;
+    const enum state to   = t->to_state;
+
+    const enum state allowed_state = transition_check(from, to);
+    if (allowed_state == to)
+    {
+        const enum state out_fnc_state = t->fnc_out(from, to);
+        const enum state to_fnc_state = t->fnc_in(from, to);
+        if (allowed_state != out_fnc_state || allowed_state != to_fnc_state)
+            // Undo?
+            return from;
+        else
+            return to;
+    }
+    else
+        return from;    
+}

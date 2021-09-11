@@ -1,0 +1,15 @@
+# Here we define the state machine by some standardized format, which the 
+# mop-fsm.py script will interpret and generate C code from.
+
+states:
+    state1
+    state2
+    state3
+    state4
+
+transitions:
+    state1 -> state1
+    state2 -> state1
+    state1 -> state2
+    state3 -> state4
+    state4 -> state3
